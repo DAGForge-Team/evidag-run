@@ -10,9 +10,10 @@ Ctrl-C — nothing is installed persistently (state lives under `~/.dagforge`).
 
 ## What's here
 
-- **`run.sh`** — detects Docker/Podman compose, writes a small compose file under `~/.dagforge`, starts
-  the demo image (mock stack, no keys), opens the browser, follows logs, and stops the container on
-  Ctrl-C.
+- **`run.sh`** — detects Docker or Podman (a compose plugin is used when present, otherwise it falls
+  back to a plain `docker`/`podman run`, so a bare `brew install podman` works too), starts the demo
+  image (mock stack, no keys) with state under `~/.dagforge`, opens the browser, follows logs, and stops
+  the container on Ctrl-C.
 
 ## Launch command
 
