@@ -1,39 +1,87 @@
-# DAGForge runner
+# Run the DAGForge demo
 
-Source for the public **[`DAGForge-Team/dagforge-run`](https://github.com/DAGForge-Team/dagforge-run)**
-repo — the one-line launcher for the self-contained DAGForge demo. These files carry no secrets (they
-only reference the public GHCR image), so they live in a public repo even while the main code repo stays
-private.
+DAGForge turns a causal question into a peer-review-style **causal DAG** — it resolves your
+concepts, searches the literature, reasons over the evidence, and assembles the graph (the
+M1 → M4 pipeline). This repo is a one-command launcher that runs the whole app on your own
+machine, in a single container. No account, no source checkout — just Docker (or Podman) and
+the command below.
 
-It's a *runner*, not an installer: it pulls the image, runs it in the foreground, and tears it down on
-Ctrl-C — nothing is installed persistently (state lives under `~/.dagforge`).
-
-## What's here
-
-- **`run.sh`** — detects Docker or Podman (a compose plugin is used when present, otherwise it falls
-  back to a plain `docker`/`podman run`, so a bare `brew install podman` works too), starts the demo
-  image (mock stack, no keys) with state under `~/.dagforge`, opens the browser, follows logs, and stops
-  the container on Ctrl-C.
-
-## Launch command
-
-Because `dagforge-run` is public, the raw URL works with no extra hosting:
+## Run it
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/DAGForge-Team/dagforge-run/main/run.sh | bash
 ```
 
-Want a prettier URL? Enable GitHub Pages on `dagforge-run` and serve `run.sh` from there
-(`https://dagforge-team.github.io/dagforge-run/run.sh`) — optional; the raw URL above already works.
+The first run pulls the demo image (a few hundred MB — give it a minute), starts it, and opens
+**http://localhost:8000** in your browser, already signed in.
 
-## Prerequisite: the image must be public
+- **Stop it** — press **Ctrl-C** in the terminal. The container is removed; nothing is installed
+  on your system (scratch state lives under `~/.dagforge`).
+- **Signed out?** Log back in with **`admin@dagforge.local`** / **`dagforge`**.
+- **Want to read the script before running it?**
+  `curl -fsSL https://raw.githubusercontent.com/DAGForge-Team/dagforge-run/main/run.sh -o run.sh`,
+  read it, then `bash run.sh`.
 
-`run.sh` pulls `ghcr.io/dagforge-team/dagforge:latest` anonymously. Publish it once (git tag `v*` or a
-manual run of the `Publish container image` workflow in the main repo), then flip the GHCR package to
-**Public** in its settings. Until then, `run.sh` fails at the pull step — everything before it (the
-compose file, engine detection) works, only the anonymous pull needs the flip.
+You'll need **Docker** or **Podman** installed
+([get Docker](https://docs.docker.com/get-docker/) · [get Podman](https://podman.io/get-started/)).
+A compose plugin is used when present; a plain `docker`/`podman` install works too.
 
-## Updating
+## What you'll see
 
-`run.sh` is the source of truth here in the main repo under `deploy/runner/`. To update the public repo,
-copy this `run.sh` (and this README) into a checkout of `dagforge-run` and push.
+Out of the box the demo runs **fully offline on a mock stack** — no API keys, no network calls.
+It comes seeded with one finished run, so you can explore right away: browse the generated DAG,
+its identification analysis and PRISMA record, the provenance trail, and submit your own run to
+watch the M1 → M4 pipeline progress end to end. The pipeline results are canned, so this is the
+quickest way to see the whole interface.
+
+## See the real pipeline (bring your own LLM key)
+
+To run the **real** pipeline against a live model, give the container a provider and an API key,
+then relaunch. Keys stay on your machine — they're read from a local env file and are never
+entered in the web UI.
+
+1. Create **`~/.dagforge/.env`** with the real pipeline switched on, plus your provider and key:
+
+   ```dotenv
+   M6_RUN_ORCHESTRATOR_FACTORY=apps.web_application.composition.build_real_orchestrator
+   LLM_PROVIDER=openai
+   LLM_MODEL=gpt-4o
+   OPENAI_API_KEY=sk-...
+   # UMLS_API_KEY=...   # optional — richer M1 concept enrichment
+   ```
+
+2. Run the same command again:
+
+   ```bash
+   curl -fsSL https://raw.githubusercontent.com/DAGForge-Team/dagforge-run/main/run.sh | bash
+   ```
+
+The launcher picks up `~/.dagforge/.env` automatically. Until you set the real orchestrator factory
+above, the demo stays on the mock stack — **a key on its own doesn't start spending**. Real runs
+take a few minutes each and use your provider's credits.
+
+### Providers
+
+| Provider | `LLM_PROVIDER` | Credentials in `~/.dagforge/.env` |
+| --- | --- | --- |
+| OpenAI | `openai` | `OPENAI_API_KEY=sk-...` |
+| Anthropic | `anthropic` | `ANTHROPIC_API_KEY=sk-ant-...` |
+| Local, OpenAI-compatible (e.g. Ollama) | `local` | `LOCAL_LLM_BASE_URL=...`, `LOCAL_LLM_API_KEY=...` |
+
+Set `LLM_MODEL` to a model your provider serves — e.g. `gpt-4o`, `claude-opus-4-7`, `qwen2.5-coder`.
+A local endpoint has to be reachable *from inside the container*, so point `LOCAL_LLM_BASE_URL` at
+your host's container address (e.g. `http://host.docker.internal:11434/v1`), not `localhost`.
+
+## Handy knobs
+
+Set these in the shell before the command (e.g. `curl -fsSL … | DAGFORGE_PORT=8080 bash`):
+
+- `DAGFORGE_PORT` — host port (default `8000`).
+- `DAGFORGE_PULL` — `always` (default), `missing`, or `never` once the image is cached.
+- `DAGFORGE_NO_BANNER=1` — skip the startup banner.
+
+---
+
+This repo holds a single script, **`run.sh`** — the launcher. It pulls the public image
+`ghcr.io/dagforge-team/dagforge:latest`, runs it, and cleans up on exit. No secrets and no source
+code; the DAGForge codebase lives elsewhere.
