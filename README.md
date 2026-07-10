@@ -67,7 +67,7 @@ minutes each and use your provider's credits.
 | Anthropic | `anthropic` | `ANTHROPIC_API_KEY=sk-ant-...` |
 | Local, OpenAI-compatible (e.g. Ollama) | `local` | `LOCAL_LLM_BASE_URL=...`, `LOCAL_LLM_API_KEY=...` |
 
-Set `LLM_MODEL` to a model your provider serves — e.g. `gpt-4o`, `claude-opus-4-7`, `qwen2.5-coder`.
+Set `LLM_MODEL` to a model your provider serves — e.g. `claude-opus-4-6` (recommended), `gpt-5.5`, `qwen2.5-coder`.
 A local endpoint has to be reachable *from inside the container*, so point `LOCAL_LLM_BASE_URL` at
 your host's container address (e.g. `http://host.docker.internal:11434/v1`), not `localhost`. (Note: Local LLM support is currently disabled) 
 
