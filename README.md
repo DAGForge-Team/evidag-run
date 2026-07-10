@@ -69,7 +69,8 @@ minutes each and use your provider's credits.
 
 Set `LLM_MODEL` to a model your provider serves — e.g. `gpt-4o`, `claude-opus-4-7`, `qwen2.5-coder`.
 A local endpoint has to be reachable *from inside the container*, so point `LOCAL_LLM_BASE_URL` at
-your host's container address (e.g. `http://host.docker.internal:11434/v1`), not `localhost`.
+your host's container address (e.g. `http://host.docker.internal:11434/v1`), not `localhost`. (Note: Local LLM support is currently disabled) 
+
 
 ## Handy knobs
 
