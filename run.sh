@@ -83,8 +83,7 @@ echo "[dagforge] runtime: ${COMPOSE:-${ENGINE} run}"
 # ── Prepare the run (a compose file is written only when using compose) ─────────────────────────────
 mkdir -p "${STATE_DIR}"
 echo "[dagforge] The demo runs offline on a mock stack — no API keys needed."
-echo "[dagforge] For real pipeline runs, put your provider + key in ${ENV_FILE} and re-run"
-echo "           (start it with M6_RUN_ORCHESTRATOR_FACTORY=apps.web_application.composition.build_real_orchestrator)."
+echo "[dagforge] For real pipeline runs, put DAGFORGE_MODE=live plus your provider + key in ${ENV_FILE} and re-run."
 [ -f "${ENV_FILE}" ] && echo "[dagforge] loading ${ENV_FILE}"
 
 if [ -n "${COMPOSE}" ]; then

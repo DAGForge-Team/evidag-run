@@ -41,7 +41,7 @@ entered in the web UI.
 1. Create **`~/.dagforge/.env`** with the real pipeline switched on, plus your provider and key:
 
    ```dotenv
-   M6_RUN_ORCHESTRATOR_FACTORY=apps.web_application.composition.build_real_orchestrator
+   DAGFORGE_MODE=live
    LLM_PROVIDER=openai
    LLM_MODEL=gpt-4o
    OPENAI_API_KEY=sk-...
@@ -54,9 +54,9 @@ entered in the web UI.
    curl -fsSL https://raw.githubusercontent.com/DAGForge-Team/dagforge-run/main/run.sh | bash
    ```
 
-The launcher picks up `~/.dagforge/.env` automatically. Until you set the real orchestrator factory
-above, the demo stays on the mock stack — **a key on its own doesn't start spending**. Real runs
-take a few minutes each and use your provider's credits.
+The launcher picks up `~/.dagforge/.env` automatically. Until you set `DAGFORGE_MODE=live` above, the
+demo stays on the mock stack — **a key on its own doesn't start spending**. Real runs take a few
+minutes each and use your provider's credits.
 
 ### Providers
 
