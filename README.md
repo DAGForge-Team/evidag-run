@@ -29,7 +29,7 @@ A compose plugin is used when present; a plain `docker`/`podman` install works t
 Out of the box the demo runs **fully offline on a mock stack** — no API keys, no network calls.
 It comes seeded with one finished run, so you can explore right away: browse the generated DAG,
 its identification analysis and PRISMA record, the provenance trail, and submit your own run to
-watch the M1 → M4 pipeline progress end to end. The pipeline results are canned, so this is the
+watch the pipeline progress end to end. The pipeline results are canned, so this is the
 quickest way to see the whole interface.
 
 ## See the real pipeline (bring your own LLM key)
@@ -45,7 +45,7 @@ entered in the web UI.
    LLM_PROVIDER=openai
    LLM_MODEL=gpt-4o
    OPENAI_API_KEY=sk-...
-   # UMLS_API_KEY=...   # optional — richer M1 concept enrichment
+   # UMLS_API_KEY=...   # optional — richer concept enrichment
    ```
 
 2. Run the same command again:
