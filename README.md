@@ -1,9 +1,7 @@
 # Run the DAGForge demo
 
-DAGForge turns a causal question into a peer-review-style **causal DAG** — it resolves your
-concepts, searches the literature, reasons over the evidence, and assembles the graph (the
-M1 → M4 pipeline). This repo is a one-command launcher that runs the whole app on your own
-machine, in a single container. No account, no source checkout — just Docker (or Podman) and
+Constructing causal directed acyclic graphs (DAGs) remains a manual process and a bottleneck to studies that require causal inference. DAGForge is a browser-based system that converts free-text study concepts into auditable causal DAGs through a literature-backed, UMLS-enhanced, and evidence-traceable pipeline. This repo is a one-command launcher that runs the whole app on your own
+machine, in a single container. No account or source checkout is needed — just Docker (or Podman) and
 the command below.
 
 ## Run it
