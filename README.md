@@ -45,7 +45,7 @@ entered in the web UI.
    LLM_PROVIDER=openai
    LLM_MODEL=gpt-4o
    OPENAI_API_KEY=sk-...
-   # UMLS_API_KEY=...   # optional — richer concept enrichment. If missing, run hard fails with UMLS-enrichment enabled
+   # UMLS_API_KEY=...   # required for the default UMLS enrichment (Submit is rejected without it); parser_only needs no key
    # NCBI_API_KEY=...   # optional but recommended - significantly improves literature search retrieval time
    ```
 
