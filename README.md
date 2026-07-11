@@ -34,7 +34,7 @@ quickest way to see the whole interface.
 
 ## See the real pipeline (bring your own LLM key)
 
-To run the **real** pipeline against a live model, give the container a provider and an API key,
+To run the **real** pipeline against a live model, give the container a provider and an API key (credits needed),
 then relaunch. Keys stay on your machine — they're read from a local env file and are never
 entered in the web UI.
 
