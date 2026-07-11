@@ -42,11 +42,16 @@ entered in the web UI.
 
    ```dotenv
    DAGFORGE_MODE=live
-   LLM_PROVIDER=openai
-   LLM_MODEL=gpt-4o
+   LLM_PROVIDER=anthropic
+   LLM_MODEL=claude-sonnet-4-6
    OPENAI_API_KEY=sk-...
+   ANTHROPIC_API_KEY=sl-...
    # UMLS_API_KEY=...   # required for the default UMLS enrichment (Submit is rejected without it); parser_only needs no key
    # NCBI_API_KEY=...   # optional but recommended - significantly improves literature search retrieval time
+   # Background run execution: ORM task backend + db_worker so submit returns immediately
+   # and the run detail page shows live per-stage progress
+   DAGFORGE_TASKS_BACKEND=database
+   
    ```
 
 2. Run the same command again:
