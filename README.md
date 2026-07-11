@@ -43,7 +43,7 @@ entered in the web UI.
    ```dotenv
    DAGFORGE_MODE=live
    LLM_PROVIDER=anthropic
-   LLM_MODEL=claude-sonnet-4-6
+   LLM_MODEL=claude-sonnet-4-6 
    OPENAI_API_KEY=sk-...
    ANTHROPIC_API_KEY=sk-...
    # UMLS_API_KEY=...   # required for the default UMLS enrichment (Submit is rejected without it); parser_only needs no key
