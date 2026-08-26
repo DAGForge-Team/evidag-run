@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# DAGForge one-line launcher.
+# EviDAG one-line launcher.
 #
 #   curl -fsSL https://raw.githubusercontent.com/DAGForge-Team/dagforge-run/main/run.sh | bash
 #
-# Detects Docker or Podman compose, writes a small compose file under ~/.dagforge, starts the
+# Detects Docker or Podman compose, writes a small compose file under ~/.evidag, starts the
 # self-contained demo image (mock stack — no API keys, no network), opens your browser, and follows the
 # logs. Ctrl-C stops and removes the container. The image is pinned to a public GHCR package; nothing
 # here needs a checkout of the source repo.
@@ -12,21 +12,29 @@
 #   curl -fsSL https://raw.githubusercontent.com/DAGForge-Team/dagforge-run/main/run.sh -o run.sh && less run.sh
 set -euo pipefail
 
-IMAGE="${DAGFORGE_IMAGE:-ghcr.io/dagforge-team/dagforge:latest}"
-PORT="${DAGFORGE_PORT:-8000}"
+IMAGE="${EVIDAG_IMAGE-${DAGFORGE_IMAGE-ghcr.io/dagforge-team/dagforge:latest}}"
+PORT="${EVIDAG_PORT-${DAGFORGE_PORT-8000}}"
 URL="http://localhost:${PORT}"
-STATE_DIR="${DAGFORGE_HOME:-$HOME/.dagforge}"
+if [ -n "${EVIDAG_HOME+x}" ]; then
+  STATE_DIR="${EVIDAG_HOME}"
+elif [ -n "${DAGFORGE_HOME+x}" ]; then
+  STATE_DIR="${DAGFORGE_HOME}"
+elif [ -d "${HOME}/.dagforge" ] && [ ! -e "${HOME}/.evidag" ]; then
+  STATE_DIR="${HOME}/.dagforge"
+else
+  STATE_DIR="${HOME}/.evidag"
+fi
 COMPOSE_FILE="${STATE_DIR}/compose.yaml"
 ENV_FILE="${STATE_DIR}/.env"
 STACK_NAME="dagforge"
-PULL="${DAGFORGE_PULL:-always}"   # always | missing | never — maps to compose pull_policy and `run --pull`
+PULL="${EVIDAG_PULL-${DAGFORGE_PULL-always}}"   # always | missing | never
 
 # ── Banner ─────────────────────────────────────────────────────────────────────────────────────────
 # Coral wordmark on brand (--ds-color-coral #ff7759 / -coral-soft #ffad9b), truecolor with a 256-color
 # fallback. Color only when stdout is a terminal and NO_COLOR is unset; otherwise plain text. Set
-# DAGFORGE_NO_BANNER=1 to skip it.
+# EVIDAG_NO_BANNER=1 to skip it (legacy DAGFORGE_NO_BANNER is also accepted).
 banner() {
-  [ -n "${DAGFORGE_NO_BANNER:-}" ] && return 0
+  [ -n "${EVIDAG_NO_BANNER-${DAGFORGE_NO_BANNER-}}" ] && return 0
   local CORAL='' SOFT='' D='' R=''
   if [ -t 1 ] && [ -z "${NO_COLOR:-}" ]; then
     if [ "${COLORTERM:-}" = "truecolor" ] || [ "${COLORTERM:-}" = "24bit" ]; then
@@ -42,12 +50,11 @@ banner() {
   printf '%s' "$CORAL"
   cat <<'ART'
 
-    ____  ___   ____________
-   / __ \/   | / ____/ ____/___  _________ ____
-  / / / / /| |/ / __/ /_  / __ \/ ___/ __ `/ _ \
- / /_/ / ___ / /_/ / __/ / /_/ / /  / /_/ /  __/
-/_____/_/  |_\____/_/    \____/_/   \__, /\___/
-                                   /____/
+    ______      _ ____  ___   ______
+   / ____/   __(_) __ \/   | / ____/
+  / __/ | | / / / / / / /| |/ / __
+ / /___ | |/ / / /_/ / ___ / /_/ /
+/_____/ |___/_/_____/_/  |_\____/
 ART
   printf '%s   %s(exposure) ─▶ (mediator) ─▶ (outcome)%s\n' "$R" "$SOFT" "$R"
   printf '%s   Automated Causal DAG Generation · self-contained demo%s\n\n' "$D" "$R"
@@ -78,19 +85,19 @@ else
   echo "  Podman:         https://podman.io/get-started/" >&2
   exit 1
 fi
-echo "[dagforge] runtime: ${COMPOSE:-${ENGINE} run}"
+echo "[evidag] runtime: ${COMPOSE:-${ENGINE} run}"
 
 # ── Prepare the run (a compose file is written only when using compose) ─────────────────────────────
 mkdir -p "${STATE_DIR}"
-echo "[dagforge] The demo runs offline on a mock stack — no API keys needed."
-echo "[dagforge] For real pipeline runs, put DAGFORGE_MODE=live plus your provider + key in ${ENV_FILE} and re-run."
-[ -f "${ENV_FILE}" ] && echo "[dagforge] loading ${ENV_FILE}"
+echo "[evidag] The demo runs offline on a mock stack — no API keys needed."
+echo "[evidag] For real pipeline runs, put EVIDAG_MODE=live plus your provider + key in ${ENV_FILE} and re-run."
+[ -f "${ENV_FILE}" ] && echo "[evidag] loading ${ENV_FILE}"
 
 if [ -n "${COMPOSE}" ]; then
   cat > "${COMPOSE_FILE}" <<YAML
 name: ${STACK_NAME}
 services:
-  dagforge:
+  evidag:
     image: ${IMAGE}
     pull_policy: ${PULL}
     ports:
@@ -122,13 +129,13 @@ follow_logs() {
   else ${ENGINE} logs -f "${STACK_NAME}"; fi
 }
 cleanup() {
-  echo; echo "[dagforge] stopping…"
+  echo; echo "[evidag] stopping…"
   if [ -n "${COMPOSE}" ]; then ${COMPOSE} -f "${COMPOSE_FILE}" down
   else ${ENGINE} rm -f "${STACK_NAME}" >/dev/null 2>&1 || true; fi
 }
 trap cleanup INT TERM
 
-echo "[dagforge] starting (first run pulls the image — a few hundred MB, give it a minute)…"
+echo "[evidag] starting (first run pulls the image — a few hundred MB, give it a minute)…"
 start_stack
 
 open_browser() {
@@ -138,13 +145,13 @@ open_browser() {
   fi
 }
 
-printf '[dagforge] waiting for %s ' "${URL}"
+printf '[evidag] waiting for %s ' "${URL}"
 for _ in $(seq 1 90); do
   if curl -fsS "${URL}/" >/dev/null 2>&1; then echo "— ready."; break; fi
   printf '.'; sleep 2
 done
 
-echo "[dagforge] open ${URL}  ·  login: admin@dagforge.local / dagforge  ·  Ctrl-C to stop"
+echo "[evidag] open ${URL}  ·  login: admin@evidag.local / evidag  ·  Ctrl-C to stop"
 open_browser "${URL}"
 
 # Foreground log follow. Ctrl-C interrupts this, the trap runs, and the container is torn down.
