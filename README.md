@@ -1,7 +1,5 @@
 # EviDAG
 
-**DAGForge had been renamed to EviDAG**
-
 Constructing causal directed acyclic graphs (DAGs) is central to observational biomedical research, but it remains a manual process requiring analysts to connect study variables with prior literature, judge uncertain causal claims, and preserve enough provenance for expert review. We present EviDAG, a browser-based system for drafting causal DAGs as auditable evidence artifacts. Given free-text study concepts, EviDAG creates a reproducible literature snapshot, uses an LLM-based causal reasoning module to make structured pairwise causal judgments with verbatim citation grounding, and assembles these judgments into a constraint-checked graph whose edges expose confidence, provenance, and reviewable rationale. The interface supports study submission, progress inspection, evidence-card review, graph comparison, adjustment-set computation, and export. In benchmarks against compact and published literature reference DAGs, EviDAG achieves high recall on the literature cohort while preserving verifiable evidence trails that LLM-only baselines lack. EviDAG demonstrates a traceable workflow for literature-linked causal DAG authoring, keeping automation inspectable and replayable for scientific review.
 
 ## Run the EviDAG demo
@@ -11,14 +9,14 @@ a single container. No account or source checkout is required — only Docker or
 command below.
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/DAGForge-Team/dagforge-run/main/run.sh | bash
+curl -fsSL https://raw.githubusercontent.com/DAGForge-Team/evidag-run/main/run.sh | bash
 ```
 
 The first run pulls the demo image (a few hundred MB; the initial pull may take a minute), starts
 it, and opens **http://localhost:8000** in your browser, already signed in.
 
 - **To inspect the script before running it:**
-  `curl -fsSL https://raw.githubusercontent.com/DAGForge-Team/dagforge-run/main/run.sh -o run.sh`,
+  `curl -fsSL https://raw.githubusercontent.com/DAGForge-Team/evidag-run/main/run.sh -o run.sh`,
   review it, then run `bash run.sh`.
 - **To stop the demo:** press **Ctrl-C** in the terminal. The container is removed; nothing is
   installed on your system (scratch state lives under `~/.evidag`).
@@ -59,7 +57,7 @@ entered in the web UI.
 2. Run the same command again:
 
    ```bash
-   curl -fsSL https://raw.githubusercontent.com/DAGForge-Team/dagforge-run/main/run.sh | bash
+   curl -fsSL https://raw.githubusercontent.com/DAGForge-Team/evidag-run/main/run.sh | bash
    ```
 
 The launcher picks up `~/.evidag/.env` automatically. Until `EVIDAG_MODE=live` is set, the demo

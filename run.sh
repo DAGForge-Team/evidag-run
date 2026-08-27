@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # EviDAG one-line launcher.
 #
-#   curl -fsSL https://raw.githubusercontent.com/DAGForge-Team/dagforge-run/main/run.sh | bash
+#   curl -fsSL https://raw.githubusercontent.com/DAGForge-Team/evidag-run/main/run.sh | bash
 #
 # Detects Docker or Podman compose, writes a small compose file under ~/.evidag, starts the
 # self-contained demo image (mock stack — no API keys, no network), opens your browser, and follows the
@@ -9,7 +9,7 @@
 # here needs a checkout of the source repo.
 #
 # Prefer to read before you run? Save it first:
-#   curl -fsSL https://raw.githubusercontent.com/DAGForge-Team/dagforge-run/main/run.sh -o run.sh && less run.sh
+#   curl -fsSL https://raw.githubusercontent.com/DAGForge-Team/evidag-run/main/run.sh -o run.sh && less run.sh
 set -euo pipefail
 
 IMAGE="${EVIDAG_IMAGE-${DAGFORGE_IMAGE-ghcr.io/dagforge-team/dagforge:latest}}"
