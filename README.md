@@ -1,5 +1,7 @@
 # EviDAG
 
+**DAGForge is now EviDAG** — same system, new name; all previous links and commands continue to work.
+
 Constructing causal directed acyclic graphs (DAGs) is central to observational biomedical research, but it remains a manual process requiring analysts to connect study variables with prior literature, judge uncertain causal claims, and preserve enough provenance for expert review. We present EviDAG, a browser-based system for drafting causal DAGs as auditable evidence artifacts. Given free-text study concepts, EviDAG creates a reproducible literature snapshot, uses an LLM-based causal reasoning module to make structured pairwise causal judgments with verbatim citation grounding, and assembles these judgments into a constraint-checked graph whose edges expose confidence, provenance, and reviewable rationale. The interface supports study submission, progress inspection, evidence-card review, graph comparison, adjustment-set computation, and export. In benchmarks against compact and published literature reference DAGs, EviDAG achieves high recall on the literature cohort while preserving verifiable evidence trails that LLM-only baselines lack. EviDAG demonstrates a traceable workflow for literature-linked causal DAG authoring, keeping automation inspectable and replayable for scientific review.
 
 ## Run the EviDAG demo
